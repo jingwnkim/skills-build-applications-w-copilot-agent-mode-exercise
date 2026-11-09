@@ -11,7 +11,7 @@ function formatValue(value) {
   return String(value)
 }
 
-function CollectionPage({ title, collection, columns }) {
+function CollectionPage({ title, collection, endpoint, columns }) {
   const [records, setRecords] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -21,7 +21,7 @@ function CollectionPage({ title, collection, columns }) {
 
     async function loadRecords() {
       try {
-        setRecords(await fetchCollection(collection, controller.signal))
+        setRecords(await fetchCollection(endpoint, controller.signal))
       } catch (requestError) {
         if (requestError.name !== 'AbortError') {
           setError(requestError.message || 'Unable to load data.')
@@ -35,7 +35,7 @@ function CollectionPage({ title, collection, columns }) {
 
     loadRecords()
     return () => controller.abort()
-  }, [collection])
+  }, [collection, endpoint])
 
   return (
     <section aria-labelledby={`${collection}-heading`}>
